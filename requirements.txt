@@ -1,2 +1,5 @@
 # No Python packages required for the basic CLI.
 # System tools required: nmap, whois
+fastapi
+uvicorn[standard]
+pydantic
