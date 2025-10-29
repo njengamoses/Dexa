@@ -1,0 +1,1 @@
+[2025-10-29T17:03:53.615904] Running passive reconnaissance on example.com\n[2025-10-29T17:03:54.856259] Reconnaissance completed.\n[2025-10-29T17:03:54.856373] Generating report...\n[2025-10-29T17:03:54.856568] Report saved as report_example.com_20251029_200354.txt\n[2025-10-29T17:04:04.297380] Starting scan on scanme.nmap.org\n
