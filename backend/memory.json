@@ -1,0 +1,27 @@
+[
+  {
+    "time": "2025-10-30T09:24:01.699072",
+    "user": "hello",
+    "bot": "Hey there! I'm Dexa \u2014 your coding assistant."
+  },
+  {
+    "time": "2025-10-30T09:25:06.981432",
+    "user": "hello",
+    "bot": "Hey there! I'm Dexa \u2014 your coding assistant."
+  },
+  {
+    "time": "2025-10-30T09:25:14.249820",
+    "user": "show me a python for loop",
+    "bot": "Example \u2014 Python for loop:\n\n```python\nfor i in range(5):\n    print(i)\n```"
+  },
+  {
+    "time": "2025-10-30T09:26:06.954184",
+    "user": "hello",
+    "bot": "Hey there! I'm Dexa \u2014 your coding assistant."
+  },
+  {
+    "time": "2025-10-30T09:26:20.255093",
+    "user": "show me a python for loop",
+    "bot": "Example \u2014 Python for loop:\n\n```python\nfor i in range(5):\n    print(i)\n```"
+  }
+]

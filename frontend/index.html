@@ -1,20 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dexa – Coding Assistant</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dexa — Coding Assistant</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="chat-container">
-    <h2>💻 Dexa – Coding Helper</h2>
-    <div id="chat-box"></div>
-    <div class="input-area">
-      <input type="text" id="user-input" placeholder="Ask Dexa something about coding...">
-      <button id="send-btn">Send</button>
-    </div>
+  <div class="app">
+    <header>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <h1>Dexa</h1>
+          <p class="subtitle">Coding assistant — ask about code, errors, or examples</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button id="show-history">Show History</button>
+          <button id="clear-memory">Clear Memory</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="chat-box"></main>
+
+    <form id="chat-form" autocomplete="off">
+      <input id="user-input" placeholder="Type a question (e.g. 'python: for loop')" />
+      <button type="submit">Send</button>
+    </form>
+
+    <footer>
+      <small>Local demo — backend at <code>http://127.0.0.1:9000</code></small>
+    </footer>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>

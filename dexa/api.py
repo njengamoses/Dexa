@@ -1,61 +1,66 @@
-from fastapi import FastAPI, HTTPException, Query
-from pydantic import BaseModel
-import asyncio
-from dexa.core import scanner, recon, report
-import shutil
-from dexa.utils.logger import log
+from fastapi import FastAPI, Request, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+import json
+from backend.brain import think
+from datetime import datetime
 import os
 
 app = FastAPI(title="Dexa API", version="1.0")
 
-class ScanRequest(BaseModel):
-    target: str
-    timeout: int = 60   # seconds
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-class ReconRequest(BaseModel):
-    domain: str
-    timeout: int = 30
+MEMORY_FILE = "backend/memory.json"
+MAX_MEMORY = 200
+
+def load_memory():
+    try:
+        with open(MEMORY_FILE, "r") as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+def save_memory(memory):
+    # keep memory bounded
+    memory = memory[-MAX_MEMORY:]
+    with open(MEMORY_FILE, "w") as f:
+        json.dump(memory, f, indent=2)
 
 @app.get("/")
-async def root():
+def root():
     return {"service": "Dexa API", "status": "ok"}
 
-@app.post("/api/scan")
-async def api_scan(req: ScanRequest):
-    target = req.target
-    timeout = req.timeout
-    log(f"API: scan requested for {target} with timeout {timeout}s")
+@app.post("/chat")
+async def chat(request: Request):
+    data = await request.json()
+    message = data.get("message", "")
+    if message is None:
+        raise HTTPException(status_code=400, detail="No message provided")
 
-    # Run blocking nmap in thread to avoid blocking the event loop
-    try:
-        out = await asyncio.to_thread(scanner.run_scan, target)
-        if out is None:
-            raise HTTPException(status_code=500, detail="Scan failed or returned no output.")
-        # Save report and return path
-        path = await asyncio.to_thread(report.save_report, out, target)
-        return {"target": target, "report": path, "output_preview": out[:800]}
-    except asyncio.CancelledError:
-        raise HTTPException(status_code=500, detail="Scan cancelled")
-    except Exception as e:
-        log(f"API scan error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    memory = load_memory()
+    reply = think(message, memory)
 
-@app.post("/api/recon")
-async def api_recon(req: ReconRequest):
-    domain = req.domain
-    timeout = req.timeout
-    log(f"API: recon requested for {domain} with timeout {timeout}s")
-    try:
-        out = await asyncio.to_thread(recon.passive_recon, domain)
-        if out is None:
-            raise HTTPException(status_code=500, detail="Recon failed or returned no output.")
-        path = await asyncio.to_thread(report.save_report, out, domain)
-        return {"domain": domain, "report": path, "output_preview": out[:800]}
-    except Exception as e:
-        log(f"API recon error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    entry = {
+        "time": datetime.utcnow().isoformat(),
+        "user": message,
+        "bot": reply
+    }
+    memory.append(entry)
+    save_memory(memory)
 
-# Simple endpoint to check memory / status of Dexa core CLI presence
-@app.get("/api/status")
-async def status():
-    return {"dexa_core": True, "nmap_installed": bool(shutil.which("nmap")), "whois_installed": bool(shutil.which("whois"))}
+    return {"reply": reply}
+
+@app.get("/history")
+async def history(limit: int = 50):
+    memory = load_memory()
+    return {"count": len(memory), "recent": memory[-limit:]}
+
+@app.post("/clear")
+async def clear():
+    save_memory([])
+    return {"status": "ok", "message": "memory cleared"}
