@@ -1,11 +1,34 @@
-# Dexa - Offensive Security Toolkit
+# 🤖 Dexa — Your Local AI Coding Assistant
 
-Modules:
-- core/scanner.py : nmap wrapper
-- core/recon.py   : whois wrapper
-- core/report.py  : simple report saver
-- utils/logger.py : basic logging
-- cli.py          : command-line interface
+Dexa is a lightweight **FastAPI + JavaScript** chatbot that runs fully **offline**.  
+It helps you generate code snippets, debug simple logic, and chat about programming — all locally.
 
-Ensure system tools are installed: sudo apt update && sudo apt install nmap whois -y
-Run: python3 -m dexa.cli scan <target>  OR  python3 -m dexa.cli recon <domain>
+---
+
+## 🖼 Demo
+
+![Dexa Screenshot](assets/dexa-demo.png)
+
+---
+
+## 🚀 Features
+- 🧩 **FastAPI Backend** – Handles `/chat` requests with memory-based responses  
+- 💬 **Interactive Frontend** – Clean HTML/CSS/JS chat UI  
+- 🔒 **Fully Local** – No external API calls, no data leaks  
+- ⚡ **Instant Response** – Lightweight and fast on any system  
+
+---
+
+## ⚙️ Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/<your-username>/Dexa.git
+cd Dexa
+
+# (Optional) Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
