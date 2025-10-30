@@ -7,7 +7,9 @@ It helps you generate code snippets, debug simple logic, and chat about programm
 
 ## 🖼 Demo
 
-![Dexa Screenshot](assets/dexa-demo.png)
+![Dexa Screenshot](https://raw.githubusercontent.com/njengamoses/Dexa/main/assets/dexa-demo.png)
+
+
 
 ---
 
